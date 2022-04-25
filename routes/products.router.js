@@ -1,4 +1,5 @@
 const { Router } = require("express");
+const { verifyToken } = require("../middleware/verifyToken");
 const { 
     createProduct, 
     deleteProduct, 
@@ -9,7 +10,7 @@ const {
 
 const productRouter = Router();
 
-productRouter.route("/").get(getAllProducts).post(createProduct);
+productRouter.route("/").get(verifyToken, getAllProducts).post(createProduct);
 productRouter
     .route("/:productId")
     .get(getSingleProduct)

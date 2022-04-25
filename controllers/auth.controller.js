@@ -1,4 +1,5 @@
 const User = require("../models/user.model");
+const jwt = require("jsonwebtoken");
 const { loginSchema, registerSchema } = require("../utils/validation");
 const bcrypt = require("bcryptjs");
 
@@ -44,9 +45,17 @@ const login = async(req, res) => {
     if (!isMatch) {
         return res.status(400).json({ msg: "Invalid credentials"})
     }
+    // Generate Token
+    const token = jwt.sign({
+        id: user._id,
+        username: user.username},
+        "secret",
+        {
+          expiresIn: "1h"  
+        })
 
-    res.status(200).json(user);
-};
+    res.status(201).json(token);
+}
 
 module.exports = {
     register, 
